@@ -30,18 +30,15 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   /**************************************************************************** */
   app.get("/filteredimage/",async (req: Request,res: Response)=>{
-    let {image_url}: any = req.query;
+    const image_url= req.query.image_url;
     if( !image_url ) {
-      return res.status(422)
-                .send(`Unprocessable entity`);
+      res.status(422).send(`Unprocessable entity`);
     }
-      else{
-        filterImageFromURL(image_url).then((result)=>{
-        res.sendFile(result);
-        res.on(`finish`,()=>deleteLocalFiles([result]));
-        }).catch((err)=>res.status(422).send(err))
-      }
-  } );
+      const filtered_image = await filterImageFromURL(image_url);
+      res.status(200).sendFile(filtered_image, () => {
+        deleteLocalFiles([filtered_image])
+      });
+    });
 
   //! END @TODO1
   
