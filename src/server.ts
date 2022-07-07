@@ -32,7 +32,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   app.get('/filteredimageS',async (req: Request,res: Response)=>{
     const image_url= req.query.image_url.toString();
     if( !image_url ) {
-      res.status(422).send(`Unprocessable entity`);
+      res.status(400).send(`Unprocessable entity`);
     }
       const filtered_image = await filterImageFromURL(image_url);
       res.status(200).sendFile(filtered_image, () => {
